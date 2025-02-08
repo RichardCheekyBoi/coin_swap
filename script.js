@@ -1,32 +1,14 @@
 const API_URL = "https://api.1inch.io/v5.0/1/swap";
-let userAddress = "";
 
-// Connect to MetaMask
-async function connectWallet() {
-    if (window.ethereum) {
-        const web3 = new Web3(window.ethereum);
-        await window.ethereum.request({ method: "eth_requestAccounts" });
-        const accounts = await web3.eth.getAccounts();
-        userAddress = accounts[0];
-        document.getElementById("wallet-address").innerText = `Connected: ${userAddress}`;
-    } else {
-        alert("MetaMask not found!");
-    }
-}
-
-// Perform Swap
+// Perform Swap without Connecting a Wallet
 async function swapTokens() {
-    if (!userAddress) {
-        alert("Please connect your wallet first.");
-        return;
-    }
-
+    const walletAddress = document.getElementById("walletAddress").value;
     const amount = document.getElementById("amount").value;
     const fromToken = document.getElementById("fromToken").value;
     const toToken = document.getElementById("toToken").value;
 
-    if (!amount) {
-        alert("Enter an amount to swap.");
+    if (!walletAddress || !amount) {
+        alert("Please enter a wallet address and amount.");
         return;
     }
 
@@ -46,7 +28,7 @@ async function swapTokens() {
         fromTokenAddress,
         toTokenAddress,
         amount: (amount * 1e18).toString(),
-        fromAddress: userAddress,
+        fromAddress: walletAddress,
         slippage: 1
     };
 
@@ -54,18 +36,9 @@ async function swapTokens() {
         const response = await fetch(`${API_URL}?${new URLSearchParams(swapParams)}`);
         const data = await response.json();
 
-        // Execute transaction using Web3
-        const web3 = new Web3(window.ethereum);
-        await web3.eth.sendTransaction({
-            from: userAddress,
-            to: data.tx.to,
-            data: data.tx.data,
-            gas: data.tx.gas,
-            gasPrice: data.tx.gasPrice,
-            value: data.tx.value
-        });
-
-        document.getElementById("tx-status").innerText = "Swap Successful!";
+        // Display Swap Data
+        console.log("Swap Data:", data);
+        document.getElementById("tx-status").innerText = "Swap request sent! Check your wallet.";
     } catch (error) {
         console.error("Swap failed:", error);
         document.getElementById("tx-status").innerText = "Swap Failed!";
