@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Swap</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h2>Simple Crypto Swap</h2>
+    
+    <button onclick="connectWallet()">Connect Wallet</button>
+    <p id="wallet-address">Not connected</p>
+
+    <input type="number" id="amount" placeholder="Amount">
+    <select id="fromToken">
+        <option value="ETH">ETH</option>
+        <option value="USDT">USDT</option>
+        <option value="DAI">DAI</option>
+    </select>
+    <select id="toToken">
+        <option value="USDT">USDT</option>
+        <option value="DAI">DAI</option>
+        <option value="MATIC">MATIC</option>
+    </select>
+    <button onclick="swapTokens()">Swap</button>
+
+    <p id="tx-status"></p>
+</body>
+</html>
